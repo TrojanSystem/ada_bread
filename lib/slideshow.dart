@@ -35,7 +35,8 @@ class Slide extends StatelessWidget {
               SlideShowItem(bale_5: 'አጠቃላይ', image: 'logo_2.jpg'),
               SlideShowItem(bale_5: 'ባለ 5 ብር', image: 'bale_5.png'),
               SlideShowItem(bale_5: 'ባለ 10 ብር', image: 'bale_10.png'),
-              SlideShowItem(bale_5: 'ስላይስ', image: 'bale_10.png'),
+              SlideShowItem(bale_5: 'ስላይስ', image: 'slice.png'),
+              SlideShowItem(bale_5: 'ቦምቦሊኖ', image: 'donut.png'),
             ],
 
             /// Called whenever the page in the center of the viewport changes.
