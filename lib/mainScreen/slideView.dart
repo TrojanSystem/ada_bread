@@ -10,7 +10,7 @@ class _MyCustomWidgetState extends State<MyCustomWidget> {
   String bale_10 = 'ባለ 10 ብር';
   String slice = 'ስላይስ';
   String donut = 'ቦምቦሊኖ';
-  String Sentence = 'Here';
+  String sentence = 'Here';
   bool isExpanded = true;
   bool isExpanded2 = true;
   @override
@@ -98,7 +98,7 @@ class _MyCustomWidgetState extends State<MyCustomWidget> {
                       ),
                     ),
                     secondChild: Text(
-                      Sentence,
+                      sentence,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 15.7,

@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'dataHub/data_storage.dart';
+
+class Expense extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final List contrat = Provider.of<DataStorage>(context).contactList;
+    num sumDabo = 0;
+    var z = contrat.map((e) => e.quantity).toList();
+
+    for (int x = 0; x < z.length; x++) {
+      sumDabo += z[x];
+    }
+    return Expanded(
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'images/food-truck.png',
+                  width: 50,
+                  height: 50,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Tot: ',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  sumDabo.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [
+            Colors.blue,
+            Colors.blue.withOpacity(0.4),
+          ], begin: Alignment.topRight, end: Alignment.bottomLeft),
+          color: Colors.red,
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(15),
+            bottomRight: Radius.circular(15),
+          ),
+        ),
+        margin: const EdgeInsets.all(8),
+        height: 90,
+      ),
+    );
+  }
+}
