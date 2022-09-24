@@ -17,7 +17,7 @@ class Slide extends StatelessWidget {
             width: 500,
 
             /// Height of the [ImageSlideshow].
-            height: 320,
+            height: 300,
 
             /// The page to show when first creating the [ImageSlideshow].
             initialPage: 0,

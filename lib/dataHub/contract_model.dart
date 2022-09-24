@@ -9,3 +9,15 @@ class ContractModel {
       required this.quantity,
       required this.price});
 }
+
+class DailyProductionModel {
+  final String bale_5;
+  final String bale_10;
+  final String slice;
+  final String bombolino;
+  DailyProductionModel(
+      {required this.bale_5,
+      required this.bale_10,
+      required this.slice,
+      required this.bombolino});
+}

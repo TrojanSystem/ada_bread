@@ -6,19 +6,17 @@ import '../contract_list.dart';
 import '../drop_down_menu_button.dart';
 import '../mainScreen/progress_indicator.dart';
 
-class ProductionPage extends StatelessWidget {
-  const ProductionPage({Key? key}) : super(key: key);
+class ProductionPage extends StatefulWidget {
+  ProductionPage({Key? key}) : super(key: key);
 
+  @override
+  State<ProductionPage> createState() => _ProductionPageState();
+}
+
+class _ProductionPageState extends State<ProductionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 0,
-        title: const Text('የእለት ምርት'),
-        centerTitle: true,
-        actions: [],
-      ),
       body: Column(
         children: [
           Expanded(

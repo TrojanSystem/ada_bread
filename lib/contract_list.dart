@@ -7,16 +7,58 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import 'constants.dart';
 import 'expense.dart';
 
-class ItemDetails extends StatelessWidget {
+class ItemDetails extends StatefulWidget {
+  @override
+  State<ItemDetails> createState() => _ItemDetailsState();
+}
+
+class _ItemDetailsState extends State<ItemDetails> {
+  int selectedMonth = DateTime.now().day;
+
   @override
   Widget build(BuildContext context) {
     double _w = MediaQuery.of(context).size.width;
+    final monthSelected = Provider.of<DataStorage>(context).daysOfMonth;
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              const Color.fromRGBO(40, 53, 147, 1),
+              const Color.fromRGBO(40, 53, 147, 1).withOpacity(0.9)
+            ], begin: Alignment.bottomRight, end: Alignment.topLeft),
+          ),
+        ),
+        title: const Text('የቀን ኮትራት የተሰጠ ዝርዝር'),
+        actions: [
+          DropdownButton(
+            dropdownColor: Colors.grey[850],
+            iconEnabledColor: Colors.white,
+            menuMaxHeight: 300,
+            value: selectedMonth,
+            items: monthSelected
+                .map(
+                  (e) => DropdownMenuItem(
+                    child: Text(
+                      e['mon'],
+                      style: kkDropDown,
+                    ),
+                    value: e['day'],
+                  ),
+                )
+                .toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedMonth = value as int;
+              });
+            },
+          ),
+        ],
       ),
       body: Consumer<DataStorage>(
         builder: (context, data, child) => Column(
@@ -185,10 +227,16 @@ class ItemDetails extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (ctx) => const ContratInput()));
-      }),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (ctx) => const ContratInput(),
+            ),
+          );
+        },
+      ),
     );
   }
 }

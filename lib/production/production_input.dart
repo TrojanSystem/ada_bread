@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../dataHub/data_storage.dart';
 
 class ProductionInput extends StatefulWidget {
   const ProductionInput({Key? key}) : super(key: key);
@@ -9,7 +12,10 @@ class ProductionInput extends StatefulWidget {
 
 class _ProductionInputState extends State<ProductionInput> {
   final formKey = GlobalKey<FormState>();
-  String lists = '';
+  String bale_5 = '';
+  String bale_10 = '';
+  String slice = '';
+  String bombolino = '';
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +47,14 @@ class _ProductionInputState extends State<ProductionInput> {
                   ),
                   TextFormField(
                     validator: (value) {
-                      if (value != null) {
+                      if (value == null) {
                         return 'Daily production can\'t be empty';
                       } else {
                         return null;
                       }
                     },
                     onSaved: (value) {
-                      lists = value!;
+                      bale_5 = value!;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter daily production',
@@ -84,14 +90,14 @@ class _ProductionInputState extends State<ProductionInput> {
                   ),
                   TextFormField(
                     validator: (value) {
-                      if (value != null) {
+                      if (value == null) {
                         return 'Daily production can\'t be empty';
                       } else {
                         return null;
                       }
                     },
                     onSaved: (value) {
-                      lists = value!;
+                      bale_10 = value!;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter daily production',
@@ -127,14 +133,14 @@ class _ProductionInputState extends State<ProductionInput> {
                   ),
                   TextFormField(
                     validator: (value) {
-                      if (value != null) {
+                      if (value == null) {
                         return 'Daily production can\'t be empty';
                       } else {
                         return null;
                       }
                     },
                     onSaved: (value) {
-                      lists = value!;
+                      slice = value!;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter daily production',
@@ -171,14 +177,14 @@ class _ProductionInputState extends State<ProductionInput> {
                   TextFormField(
                     maxLines: 2,
                     validator: (value) {
-                      if (value != null) {
+                      if (value == null) {
                         return 'Daily production can\'t be empty';
                       } else {
                         return null;
                       }
                     },
                     onSaved: (value) {
-                      lists = value!;
+                      bombolino = value!;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter daily production',
@@ -200,11 +206,14 @@ class _ProductionInputState extends State<ProductionInput> {
             //button
             GestureDetector(
               onTap: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
-
-                  Navigator.of(context).pop();
-                }
+                setState(() {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    Provider.of<DataStorage>(context, listen: false)
+                        .dailyProductionList(bale_5, bale_10, slice, bombolino);
+                    Navigator.of(context).pop();
+                  }
+                });
               },
               child: Container(
                 margin: const EdgeInsets.fromLTRB(100, 20, 100, 0),
