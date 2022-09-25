@@ -1,10 +1,10 @@
-import 'package:ada_bread/mainScreen/slideshow.dart';
-import 'package:ada_bread/production/production_input.dart';
+import 'package:ada_bread/main_screen/slideshow.dart';
+import 'package:ada_bread/production_screen/production_input.dart';
 import 'package:flutter/material.dart';
 
-import '../contract_list.dart';
 import '../drop_down_menu_button.dart';
-import '../mainScreen/progress_indicator.dart';
+import '../main_screen/progress_indicator.dart';
+import 'contract_list.dart';
 
 class ProductionPage extends StatefulWidget {
   ProductionPage({Key? key}) : super(key: key);

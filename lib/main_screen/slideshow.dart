@@ -1,4 +1,4 @@
-import 'package:ada_bread/mainScreen/slideShowItem.dart';
+import 'package:ada_bread/main_screen/slideShowItem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 

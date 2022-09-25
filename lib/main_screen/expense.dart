@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'dataHub/data_storage.dart';
+import '../dataHub/data_storage.dart';
 
 class Expense extends StatelessWidget {
   @override

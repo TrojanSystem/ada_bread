@@ -175,7 +175,6 @@ class _ProductionInputState extends State<ProductionInput> {
                     height: 10,
                   ),
                   TextFormField(
-                    maxLines: 2,
                     validator: (value) {
                       if (value == null) {
                         return 'Daily production can\'t be empty';

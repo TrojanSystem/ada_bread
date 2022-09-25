@@ -1,16 +1,19 @@
 import 'package:ada_bread/dataHub/data_storage.dart';
-import 'package:ada_bread/income.dart';
-import 'package:ada_bread/production/contrat_input.dart';
+import 'package:ada_bread/main_screen/income.dart';
+import 'package:ada_bread/production_screen/contrat_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'constants.dart';
-import 'expense.dart';
+import '../constants.dart';
+import '../drop_down_menu_button.dart';
+import '../main_screen/expense.dart';
 
 class ItemDetails extends StatefulWidget {
+  const ItemDetails({Key? key}) : super(key: key);
+
   @override
   State<ItemDetails> createState() => _ItemDetailsState();
 }
@@ -227,15 +230,19 @@ class _ItemDetailsState extends State<ItemDetails> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (ctx) => const ContratInput(),
-            ),
-          );
-        },
+      floatingActionButton: Builder(
+        builder: (context) => DropDownMenuButton(
+            primaryColor: Colors.red,
+            button_1: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const ContratInput(),
+                ),
+              );
+            },
+            button_2: () {},
+            button_3: () {},
+            button_4: () {}),
       ),
     );
   }
