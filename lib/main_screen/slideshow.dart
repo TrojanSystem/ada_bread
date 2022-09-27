@@ -6,7 +6,7 @@ class Slide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Container(
         color: Colors.black12,
         child: FittedBox(
@@ -24,7 +24,7 @@ class Slide extends StatelessWidget {
 
             /// The color to paint the indicator.
             indicatorColor: Colors.blue,
-            indicatorRadius: 5,
+            indicatorRadius: 8,
 
             /// The color to paint behind th indicator.
             indicatorBackgroundColor: Colors.grey,

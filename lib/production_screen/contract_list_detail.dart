@@ -1,7 +1,5 @@
 import 'package:ada_bread/dataHub/data_storage.dart';
 import 'package:ada_bread/dataHub/production_data_hub.dart';
-import 'package:ada_bread/production_screen/contrat_input.dart';
-import 'package:ada_bread/production_screen/expense.dart';
 import 'package:ada_bread/production_screen/income.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -10,23 +8,34 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../drop_down_menu_button.dart';
-import 'contract_list_detail.dart';
+import 'expense.dart';
 
-class ItemDetails extends StatefulWidget {
-  const ItemDetails({Key key}) : super(key: key);
+class ContractListDetail extends StatefulWidget {
+  const ContractListDetail({Key key}) : super(key: key);
 
   @override
-  State<ItemDetails> createState() => _ItemDetailsState();
+  State<ContractListDetail> createState() => _ContractListDetailState();
 }
 
-class _ItemDetailsState extends State<ItemDetails> {
-  int selectedMonth = DateTime.now().day;
+class _ContractListDetailState extends State<ContractListDetail> {
+  int selectedMonthForList = DateTime.now().month;
 
   @override
   Widget build(BuildContext context) {
     double _w = MediaQuery.of(context).size.width;
-    final monthSelected = Provider.of<DataStorage>(context).daysOfMonth;
+    final monthSelectedForList = Provider.of<DataStorage>(context).monthOfAYear;
+    final yearFilter = Provider.of<ProductionModelData>(context).contractList;
+    final monthFilterList = yearFilter
+        .where((element) =>
+            DateTime.parse(element.date).year == DateTime.now().year)
+        .toList();
+    var todayFilteredContratList = monthFilterList
+        .where((element) =>
+            DateTime.parse(element.date).month == selectedMonthForList)
+        .toList();
+
+    var filterName =
+        todayFilteredContratList.map((e) => e.name).toSet().toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -39,39 +48,39 @@ class _ItemDetailsState extends State<ItemDetails> {
             ], begin: Alignment.bottomRight, end: Alignment.topLeft),
           ),
         ),
-        title: const Text('የቀን ኮትራት የተሰጠ ዝርዝር'),
+        title: const Text('የኮትራት ዝርዝር'),
         actions: [
           DropdownButton(
             dropdownColor: Colors.grey[850],
             iconEnabledColor: Colors.white,
             menuMaxHeight: 300,
-            value: selectedMonth,
-            items: monthSelected
+            value: selectedMonthForList,
+            items: monthSelectedForList
                 .map(
                   (e) => DropdownMenuItem(
                     child: Text(
-                      e['mon'],
+                      e['month'],
                       style: kkDropDown,
                     ),
-                    value: e['day'],
+                    value: e['days'],
                   ),
                 )
                 .toList(),
             onChanged: (value) {
               setState(() {
-                selectedMonth = value as int;
+                selectedMonthForList = value as int;
               });
             },
           ),
         ],
       ),
-      body: Consumer<ProductionModelData>(
+      body: Consumer<DataStorage>(
         builder: (context, data, child) => Column(
           children: [
             Expanded(
               flex: 1,
               child: Row(
-                children: [
+                children: const [
                   Income(),
                   Expense(),
                 ],
@@ -84,8 +93,32 @@ class _ItemDetailsState extends State<ItemDetails> {
                   padding: EdgeInsets.all(_w / 30),
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
-                  itemCount: data.contractList.length,
+                  itemCount: filterName.length,
                   itemBuilder: (BuildContext context, int index) {
+                    var filterName = todayFilteredContratList
+                        .map((e) => e.name)
+                        .toSet()
+                        .toList();
+                    var todayFilteredContratListForQuantity = monthFilterList
+                        .where((element) => element.name == filterName[index])
+                        .toList();
+                    var filterGivenPrice = todayFilteredContratListForQuantity
+                        .map((e) => e.price)
+                        .toSet()
+                        .toList();
+                    double totalQuantity = 0;
+                    for (int x = 0;
+                        x < todayFilteredContratListForQuantity.length;
+                        x++) {
+                      totalQuantity += double.parse(
+                          todayFilteredContratListForQuantity[x].quantity);
+                    }
+                    double totalPrice = 0;
+                    for (int x = 0; x < filterGivenPrice.length; x++) {
+                      totalPrice =
+                          totalQuantity * double.parse(filterGivenPrice[x]);
+                    }
+
                     return AnimationConfiguration.staggeredList(
                       position: index,
                       delay: const Duration(milliseconds: 100),
@@ -103,7 +136,11 @@ class _ItemDetailsState extends State<ItemDetails> {
                               ),
                               IconButton(
                                 color: Colors.red,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Provider.of<ProductionModelData>(context,
+                                          listen: false)
+                                      .deleteContractList(filterName[index]);
+                                },
                                 icon: const Icon(
                                   Icons.delete_forever,
                                   size: 40,
@@ -136,7 +173,11 @@ class _ItemDetailsState extends State<ItemDetails> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          data.contractList[index].price,
+                                          totalPrice.toStringAsFixed(1),
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 18,
+                                          ),
                                         ),
                                         const SizedBox(
                                           height: 5,
@@ -163,7 +204,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                         padding:
                                             const EdgeInsets.only(bottom: 8.0),
                                         child: Text(
-                                          data.contractList[index].name,
+                                          filterName[index],
                                         ),
                                       ),
                                       subtitle: Text(
@@ -184,8 +225,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                             ),
                                           ),
                                           Text(
-                                            data.contractList[index].quantity
-                                                .toString(),
+                                            totalQuantity.toString(),
                                             style: TextStyle(
                                               color: Colors.green[800],
                                               fontFamily: 'FjallaOne',
@@ -230,26 +270,6 @@ class _ItemDetailsState extends State<ItemDetails> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: Builder(
-        builder: (context) => DropDownMenuButton(
-            primaryColor: Colors.red,
-            button_1: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const ContratInput(),
-                ),
-              );
-            },
-            button_2: () {},
-            button_3: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const ContractListDetail(),
-                ),
-              );
-            },
-            button_4: () {}),
       ),
     );
   }

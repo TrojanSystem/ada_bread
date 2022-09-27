@@ -7,7 +7,7 @@ import '../main_screen/progress_indicator.dart';
 import 'contract_list.dart';
 
 class ProductionPage extends StatefulWidget {
-  ProductionPage({Key? key}) : super(key: key);
+  ProductionPage({Key key}) : super(key: key);
 
   @override
   State<ProductionPage> createState() => _ProductionPageState();

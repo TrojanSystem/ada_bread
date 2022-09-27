@@ -1,11 +1,11 @@
+import 'package:ada_bread/dataHub/data_model/contract_model.dart';
+import 'package:ada_bread/dataHub/production_data_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../dataHub/data_storage.dart';
-
 class ContratInput extends StatefulWidget {
-  const ContratInput({Key? key}) : super(key: key);
+  const ContratInput({Key key}) : super(key: key);
 
   @override
   State<ContratInput> createState() => _ContratInputState();
@@ -69,7 +69,7 @@ class _ContratInputState extends State<ContratInput> {
                       }
                     },
                     onSaved: (value) {
-                      name = value!;
+                      name = value;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter the name',
@@ -112,7 +112,7 @@ class _ContratInputState extends State<ContratInput> {
                       }
                     },
                     onSaved: (value) {
-                      quantity = int.parse(value!);
+                      quantity = int.parse(value);
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter Quantity',
@@ -202,7 +202,7 @@ class _ContratInputState extends State<ContratInput> {
                             }
                           },
                           onSaved: (value) {
-                            price = double.parse(value!);
+                            price = double.parse(value);
                           },
                           decoration: InputDecoration(
                             hintText: 'Enter Price',
@@ -229,10 +229,16 @@ class _ContratInputState extends State<ContratInput> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  if (formKey.currentState!.validate()) {
-                    formKey.currentState!.save();
-                    Provider.of<DataStorage>(context, listen: false)
-                        .contractList(name, quantity, dateTime, price);
+                  if (formKey.currentState.validate()) {
+                    formKey.currentState.save();
+                    final addContract = ContractModel(
+                      name: name,
+                      date: dateTime,
+                      quantity: quantity.toString(),
+                      price: price.toString(),
+                    );
+                    Provider.of<ProductionModelData>(context, listen: false)
+                        .addContractList(addContract);
                     Navigator.of(context).pop();
                   }
                 });

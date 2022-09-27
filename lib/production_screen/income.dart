@@ -1,18 +1,19 @@
-import 'package:ada_bread/dataHub/data_storage.dart';
+import 'package:ada_bread/dataHub/production_data_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Income extends StatelessWidget {
-  Income({Key? key}) : super(key: key);
+  const Income({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final List contrat = Provider.of<DataStorage>(context).contactList;
+    final List contrat = Provider.of<ProductionModelData>(context).contractList;
     num totPriceDabo = 0;
     var quantityOfBread = contrat.map((e) => e.quantity).toList();
 
     var priceOfBread = contrat.map((e) => e.price).toList();
     for (int x = 0; x < quantityOfBread.length; x++) {
-      totPriceDabo += quantityOfBread[x] * priceOfBread[x];
+      totPriceDabo +=
+          double.parse(quantityOfBread[x]) * double.parse(priceOfBread[x]);
     }
     return Expanded(
       child: Container(

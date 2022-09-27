@@ -1,4 +1,5 @@
-import 'package:ada_bread/order_screen/dfo_order.dart';
+import 'package:ada_bread/expense_screen/expense_screen.dart';
+import 'package:ada_bread/order_screen/order_screen.dart';
 import 'package:ada_bread/production_screen/production_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,11 +9,12 @@ import 'bottom_nav_item.dart';
 import 'main_screen.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key? key}) : super(key: key);
+  HomePage({Key key}) : super(key: key);
   final List screens = [
     MainScreen(),
     ProductionPage(),
-    const DfoOrder(),
+    const OrderScreen(),
+    ExpenseScreen(),
   ];
   @override
   Widget build(BuildContext context) {

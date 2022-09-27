@@ -6,8 +6,8 @@ class ProgressContainerItem extends StatefulWidget {
   final int totalTask;
 
   const ProgressContainerItem({
-    required this.taskDone,
-    required this.totalTask,
+    this.taskDone,
+    this.totalTask,
   });
 
   @override

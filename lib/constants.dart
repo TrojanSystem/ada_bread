@@ -39,7 +39,7 @@ final kkButton = Container(
   height: 30.0,
   decoration: BoxDecoration(
     gradient: LinearGradient(
-        colors: [Colors.red, Colors.red[800]!.withOpacity(0.7)],
+        colors: [Colors.red, Colors.red[800].withOpacity(0.7)],
         begin: const Alignment(0.0, -1.0),
         end: const Alignment(0.0, 1.0)),
     borderRadius: BorderRadius.circular(20.0),

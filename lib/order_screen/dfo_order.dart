@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DfoOrder extends StatefulWidget {
-  const DfoOrder({Key? key}) : super(key: key);
+  const DfoOrder({Key key}) : super(key: key);
 
   @override
   State<DfoOrder> createState() => _DfoOrderState();
@@ -64,7 +64,7 @@ class _DfoOrderState extends State<DfoOrder> {
                       }
                     },
                     onSaved: (value) {
-                      lists = value!;
+                      lists = value;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter the name',
@@ -107,7 +107,7 @@ class _DfoOrderState extends State<DfoOrder> {
                       }
                     },
                     onSaved: (value) {
-                      lists = value!;
+                      lists = value;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter phone number',
@@ -198,7 +198,7 @@ class _DfoOrderState extends State<DfoOrder> {
                             }
                           },
                           onSaved: (value) {
-                            lists = value!;
+                            lists = value;
                           },
                           decoration: InputDecoration(
                             hintText: 'Enter Kilo',
@@ -244,7 +244,7 @@ class _DfoOrderState extends State<DfoOrder> {
                             }
                           },
                           onSaved: (value) {
-                            lists = value!;
+                            lists = value;
                           },
                           decoration: InputDecoration(
                             hintText: 'Enter Price',
@@ -294,7 +294,7 @@ class _DfoOrderState extends State<DfoOrder> {
                             }
                           },
                           onSaved: (value) {
-                            lists = value!;
+                            lists = value;
                           },
                           decoration: InputDecoration(
                             hintText: 'Enter amount',
@@ -340,7 +340,7 @@ class _DfoOrderState extends State<DfoOrder> {
                             }
                           },
                           onSaved: (value) {
-                            lists = value!;
+                            lists = value;
                           },
                           decoration: InputDecoration(
                             hintText: 'Remain',
@@ -365,8 +365,8 @@ class _DfoOrderState extends State<DfoOrder> {
             //button
             GestureDetector(
               onTap: () {
-                if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
+                if (formKey.currentState.validate()) {
+                  formKey.currentState.save();
 
                   Navigator.of(context).pop();
                 }

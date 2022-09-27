@@ -10,11 +10,11 @@ class DropDownMenuButton extends StatelessWidget {
   final Color primaryColor;
 
   DropDownMenuButton(
-      {required this.button_1,
-      required this.button_2,
-      required this.button_3,
-      required this.button_4,
-      required this.primaryColor});
+      {this.button_1,
+      this.button_2,
+      this.button_3,
+      this.button_4,
+      this.primaryColor});
 
   Widget build(BuildContext context) {
     return FabCircularMenu(
@@ -46,7 +46,7 @@ class DropDownMenuButton extends StatelessWidget {
             fillColor: Colors.green,
             onPressed: () {
               button_1();
-              fabKey.currentState!.close();
+              fabKey.currentState.close();
             },
             shape: const CircleBorder(),
             //padding: const EdgeInsets.fromLTRB(24.0, 100, 24, 24),
@@ -60,7 +60,7 @@ class DropDownMenuButton extends StatelessWidget {
         RawMaterialButton(
           onPressed: () {
             button_2();
-            fabKey.currentState!.close();
+            fabKey.currentState.close();
           },
           shape: const CircleBorder(),
           //  padding: const EdgeInsets.fromLTRB(24.0, 50, 24, 24),
@@ -85,7 +85,7 @@ class DropDownMenuButton extends StatelessWidget {
         RawMaterialButton(
           onPressed: () {
             button_4();
-            fabKey.currentState!.close();
+            fabKey.currentState.close();
           },
           shape: const CircleBorder(),
           padding: const EdgeInsets.all(24.0),

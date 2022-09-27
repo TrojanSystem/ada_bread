@@ -1,39 +1,58 @@
-import 'dart:core';
-
-import 'package:ada_bread/dataHub/data_model/contract_model.dart';
 import 'package:flutter/cupertino.dart';
 
-class DataStorage extends ChangeNotifier {
-  int index = 0;
-  List<ContractModel> contactList = [];
-  List<DailyProductionModel> productionList = [];
-  void currentIndex(currentIndex) {
-    index = currentIndex;
-    notifyListeners();
+class ExpensesData extends ChangeNotifier {
+  // DatabaseExpense db = DatabaseExpense();
+  double totalPrice = 0;
+  double totalIncomePrice = 0;
+
+  bool _isLoading = true;
+
+//  List<ShopModel> _expenseList = [];
+
+//  List<ShopModel> get expenseList => _expenseList;
+
+  bool get isLoading => _isLoading;
+
+  // Future loadExpenseList() async {
+  //   _isLoading = true;
+  //   notifyListeners();
+  //   _expenseList = await db.getTasks();
+  //   _isLoading = false;
+  //   notifyListeners();
+  // }
+  //
+  // Future addExpenseList(ShopModel task) async {
+  //   await db.insertTask(task);
+  //   await loadExpenseList();
+  //   notifyListeners();
+  // }
+  //
+  // Future updateExpenseList(ShopModel task) async {
+  //   await db.updateTaskList(task);
+  //   await loadExpenseList();
+  //   notifyListeners();
+  // }
+  //
+  // Future deleteExpenseList(int task) async {
+  //   await db.deleteTask(task);
+  //   await loadExpenseList();
+  //   notifyListeners();
+  // }
+
+  double addTotalPrice(price) {
+    totalPrice += price;
+    return totalPrice;
   }
 
-  void contractList(name, quantity, date, price) {
-    contactList.add(
-      ContractModel(
-        name: name,
-        date: date,
-        quantity: quantity,
-        price: price,
-      ),
-    );
-    notifyListeners();
+  double minusTotalPrice(double price) {
+    totalPrice = totalPrice - price;
+    return totalPrice;
   }
 
-  void dailyProductionList(bale_5, bale_10, slice, bombolino) {
-    productionList.add(
-      DailyProductionModel(
-        bale_5: bale_5,
-        bale_10: bale_10,
-        slice: slice,
-        bombolino: bombolino,
-      ),
-    );
-    notifyListeners();
+  double updateTotalPrice(double price, double updatePrice) {
+    totalPrice -= price;
+    totalPrice += updatePrice;
+    return totalPrice;
   }
 
   List daysOfMonth = [
@@ -162,54 +181,55 @@ class DataStorage extends ChangeNotifier {
       'day': 31,
     },
   ];
+
   List monthOfAYear = [
     {
-      'month': 'Jan',
-      'days': 1,
+      'mon': 'Jan',
+      'day': 1,
     },
     {
-      'month': 'Feb',
-      'days': 2,
+      'mon': 'Feb',
+      'day': 2,
     },
     {
-      'month': 'Mar',
-      'days': 3,
+      'mon': 'Mar',
+      'day': 3,
     },
     {
-      'month': 'Apr',
-      'days': 4,
+      'mon': 'Apr',
+      'day': 4,
     },
     {
-      'month': 'May',
-      'days': 5,
+      'mon': 'May',
+      'day': 5,
     },
     {
-      'month': 'Jun',
-      'days': 6,
+      'mon': 'Jun',
+      'day': 6,
     },
     {
-      'month': 'Jul',
-      'days': 7,
+      'mon': 'Jul',
+      'day': 7,
     },
     {
-      'month': 'Aug',
-      'days': 8,
+      'mon': 'Aug',
+      'day': 8,
     },
     {
-      'month': 'Sept',
-      'days': 9,
+      'mon': 'Sept',
+      'day': 9,
     },
     {
-      'month': 'Oct',
-      'days': 10,
+      'mon': 'Oct',
+      'day': 10,
     },
     {
-      'month': 'Nov',
-      'days': 11,
+      'mon': 'Nov',
+      'day': 11,
     },
     {
-      'month': 'Dec',
-      'days': 12,
+      'mon': 'Dec',
+      'day': 12,
     },
   ];
 }

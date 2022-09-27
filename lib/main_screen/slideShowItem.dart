@@ -4,7 +4,7 @@ class SlideShowItem extends StatelessWidget {
   final String bale_5;
   final String image;
 
-  SlideShowItem({required this.bale_5, required this.image});
+  SlideShowItem({this.bale_5, this.image});
   String Sentence = 'Here';
   bool isExpanded = true;
   bool isExpanded2 = true;

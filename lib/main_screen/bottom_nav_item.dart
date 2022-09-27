@@ -34,8 +34,12 @@ class _MyCustomBottomNavigationBarState
             width: 30,
           ),
           Image(
-            image: AssetImage('images/dfo.jpg'),
-            width: 40,
+            image: AssetImage('images/order-now.png'),
+            width: 30,
+          ),
+          Image(
+            image: AssetImage('images/expenses.png'),
+            width: 30,
           ),
         ],
       ),

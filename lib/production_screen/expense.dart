@@ -1,17 +1,18 @@
+import 'package:ada_bread/dataHub/production_data_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../dataHub/data_storage.dart';
-
 class Expense extends StatelessWidget {
+  const Expense({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final List contrat = Provider.of<DataStorage>(context).contactList;
-    num sumDabo = 0;
-    var z = contrat.map((e) => e.quantity).toList();
+    final List contrat = Provider.of<ProductionModelData>(context).contractList;
+    int sumDabo = 0;
+    var totDaboDelivered = contrat.map((e) => e.quantity).toList();
 
-    for (int x = 0; x < z.length; x++) {
-      sumDabo += z[x];
+    for (int x = 0; x < totDaboDelivered.length; x++) {
+      sumDabo += int.parse(totDaboDelivered[x]);
     }
     return Expanded(
       child: Container(

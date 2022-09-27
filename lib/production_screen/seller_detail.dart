@@ -3,7 +3,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
 
 class SellerDetail extends StatefulWidget {
-  const SellerDetail({Key? key}) : super(key: key);
+  const SellerDetail({Key key}) : super(key: key);
 
   @override
   State<SellerDetail> createState() => _SellerDetailState();

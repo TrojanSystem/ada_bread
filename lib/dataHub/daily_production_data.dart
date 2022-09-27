@@ -1,38 +1,42 @@
-import 'dart:core';
+import 'package:ada_bread/dataHub/data_model/production_model.dart';
+import 'package:flutter/material.dart';
 
-import 'package:ada_bread/dataHub/data_model/contract_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'database/production_model_database.dart';
 
-class DataStorage extends ChangeNotifier {
-  int index = 0;
-  List<ContractModel> contactList = [];
-  List<DailyProductionModel> productionList = [];
-  void currentIndex(currentIndex) {
-    index = currentIndex;
+class DailyProductionData extends ChangeNotifier {
+  ProductionModelDatabase dailyProductionDB = ProductionModelDatabase();
+
+  bool _isLoading = true;
+
+  List<ProductionModel> _productionList = [];
+
+  List<ProductionModel> get productionList => _productionList;
+
+  bool get isLoading => _isLoading;
+
+  Future loadProductionList() async {
+    _isLoading = true;
+    notifyListeners();
+    _productionList = await dailyProductionDB.getTasks();
+    _isLoading = false;
     notifyListeners();
   }
 
-  void contractList(name, quantity, date, price) {
-    contactList.add(
-      ContractModel(
-        name: name,
-        date: date,
-        quantity: quantity,
-        price: price,
-      ),
-    );
+  Future addProductionList(ProductionModel task) async {
+    await dailyProductionDB.insertTask(task);
+    await loadProductionList();
     notifyListeners();
   }
 
-  void dailyProductionList(bale_5, bale_10, slice, bombolino) {
-    productionList.add(
-      DailyProductionModel(
-        bale_5: bale_5,
-        bale_10: bale_10,
-        slice: slice,
-        bombolino: bombolino,
-      ),
-    );
+  Future updateProductionList(ProductionModel task) async {
+    await dailyProductionDB.updateTaskList(task);
+    await loadProductionList();
+    notifyListeners();
+  }
+
+  Future deleteProductionList(String task) async {
+    await dailyProductionDB.deleteTask(task);
+    await loadProductionList();
     notifyListeners();
   }
 
@@ -162,54 +166,55 @@ class DataStorage extends ChangeNotifier {
       'day': 31,
     },
   ];
+
   List monthOfAYear = [
     {
-      'month': 'Jan',
-      'days': 1,
+      'mon': 'Jan',
+      'day': 1,
     },
     {
-      'month': 'Feb',
-      'days': 2,
+      'mon': 'Feb',
+      'day': 2,
     },
     {
-      'month': 'Mar',
-      'days': 3,
+      'mon': 'Mar',
+      'day': 3,
     },
     {
-      'month': 'Apr',
-      'days': 4,
+      'mon': 'Apr',
+      'day': 4,
     },
     {
-      'month': 'May',
-      'days': 5,
+      'mon': 'May',
+      'day': 5,
     },
     {
-      'month': 'Jun',
-      'days': 6,
+      'mon': 'Jun',
+      'day': 6,
     },
     {
-      'month': 'Jul',
-      'days': 7,
+      'mon': 'Jul',
+      'day': 7,
     },
     {
-      'month': 'Aug',
-      'days': 8,
+      'mon': 'Aug',
+      'day': 8,
     },
     {
-      'month': 'Sept',
-      'days': 9,
+      'mon': 'Sept',
+      'day': 9,
     },
     {
-      'month': 'Oct',
-      'days': 10,
+      'mon': 'Oct',
+      'day': 10,
     },
     {
-      'month': 'Nov',
-      'days': 11,
+      'mon': 'Nov',
+      'day': 11,
     },
     {
-      'month': 'Dec',
-      'days': 12,
+      'mon': 'Dec',
+      'day': 12,
     },
   ];
 }

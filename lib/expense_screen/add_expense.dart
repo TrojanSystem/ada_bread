@@ -1,171 +1,65 @@
-import 'package:ada_bread/dataHub/daily_production_data.dart';
-import 'package:ada_bread/dataHub/data_model/production_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class ProductionInput extends StatefulWidget {
-  const ProductionInput({Key key}) : super(key: key);
+class AddExpense extends StatefulWidget {
+  const AddExpense({Key key}) : super(key: key);
 
   @override
-  State<ProductionInput> createState() => _ProductionInputState();
+  State<AddExpense> createState() => _AddExpenseState();
 }
 
-class _ProductionInputState extends State<ProductionInput> {
+class _AddExpenseState extends State<AddExpense> {
+  void datePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 1),
+      firstDate: DateTime(DateTime.now().month + 1),
+    ).then((value) => setState(() {
+          if (value != null) {
+            itemDate = value.toString();
+          } else {
+            itemDate = DateTime.now().toString();
+          }
+        }));
+  }
+
   final formKey = GlobalKey<FormState>();
-  String bale_5 = '';
-  String bale_10 = '';
-  String slice = '';
-  String bombolino = '';
+  String itemName = '';
+  String itemQuantity = '';
+  double itemPrice = 0;
+  String itemDate = DateTime.now().toString();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
         elevation: 0,
-        title: const Text('የእለት ምርት'),
+        backgroundColor: Colors.white,
+        toolbarHeight: 80,
         centerTitle: true,
+        title: const Text(
+          'Expenses',
+          style: TextStyle(
+            fontSize: 22,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Form(
         key: formKey,
         child: ListView(
           children: [
+            const Divider(color: Colors.grey, thickness: 1),
             Padding(
-              padding: const EdgeInsets.fromLTRB(35, 12, 35, 12),
+              padding: const EdgeInsets.fromLTRB(18, 28, 18, 8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    'ባለ 5 ብር',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Daily production can\'t be empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                    onSaved: (value) {
-                      bale_5 = value;
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Enter daily production',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(35, 12, 35, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'ባለ 10 ብር',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Daily production can\'t be empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                    onSaved: (value) {
-                      bale_10 = value;
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Enter daily production',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(35, 12, 35, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'ስላይስ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null) {
-                        return 'Daily production can\'t be empty';
-                      } else {
-                        return null;
-                      }
-                    },
-                    onSaved: (value) {
-                      slice = value;
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Enter daily production',
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(35, 12, 35, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'ቦምቦሊኖ',
+                    'Name',
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 18,
@@ -176,17 +70,17 @@ class _ProductionInputState extends State<ProductionInput> {
                   ),
                   TextFormField(
                     validator: (value) {
-                      if (value == null) {
-                        return 'Daily production can\'t be empty';
+                      if (value.isEmpty) {
+                        return 'Name can\'t be empty';
                       } else {
                         return null;
                       }
                     },
                     onSaved: (value) {
-                      bombolino = value;
+                      itemName = value;
                     },
                     decoration: InputDecoration(
-                      hintText: 'Enter daily production',
+                      hintText: 'Enter Name',
                       filled: true,
                       fillColor: Colors.grey[200],
                       enabledBorder: OutlineInputBorder(
@@ -202,27 +96,125 @@ class _ProductionInputState extends State<ProductionInput> {
                 ],
               ),
             ),
-            //button
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Description',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    maxLines: 3,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Description can\'t be empty';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onSaved: (value) {
+                      itemQuantity = value;
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Enter Description',
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 18, 18, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Price',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Price can\'t be empty';
+                      } else {
+                        return null;
+                      }
+                    },
+                    onSaved: (value) {
+                      itemPrice = double.parse(value);
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Enter Price',
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 28, 18, 8),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        datePicker();
+                      });
+                    },
+                    icon: const Icon(Icons.calendar_today),
+                  ),
+                  Text(
+                    DateFormat.yMEd().format(DateTime.parse(itemDate)),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
             GestureDetector(
               onTap: () {
-                setState(() {
-                  if (formKey.currentState.validate()) {
-                    formKey.currentState.save();
-                    final addDailyProduct = ProductionModel(
-                      bale_5: bale_5,
-                      id: DateTime.now().day,
-                      bale_10: bale_10,
-                      slice: slice,
-                      bombolino: bombolino,
-                    );
-                    Provider.of<DailyProductionData>(context, listen: false)
-                        .addProductionList(addDailyProduct);
-                    Navigator.of(context).pop();
-                  }
-                });
+                if (formKey.currentState.validate()) {
+                  formKey.currentState.save();
+
+                  Navigator.of(context).pop();
+                }
               },
               child: Container(
-                margin: const EdgeInsets.fromLTRB(100, 20, 100, 0),
+                margin: const EdgeInsets.fromLTRB(25, 20, 25, 0),
                 width: double.infinity,
                 height: 60.0,
                 decoration: BoxDecoration(
@@ -231,7 +223,7 @@ class _ProductionInputState extends State<ProductionInput> {
                 ),
                 child: const Center(
                   child: Text(
-                    'Add',
+                    'Save Expense',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
