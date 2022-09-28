@@ -1,5 +1,3 @@
-import 'package:ada_bread/dataHub/data_storage.dart';
-import 'package:ada_bread/dataHub/production_data_hub.dart';
 import 'package:ada_bread/production_screen/income.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -8,10 +6,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import '../dataHub/data/data_storage.dart';
+import '../dataHub/data/production_data_hub.dart';
 import 'expense.dart';
 
 class ContractListDetail extends StatefulWidget {
-  const ContractListDetail({Key key}) : super(key: key);
+  final double totPrice;
+  final double total;
+  const ContractListDetail({this.total, this.totPrice});
 
   @override
   State<ContractListDetail> createState() => _ContractListDetailState();
@@ -80,9 +82,9 @@ class _ContractListDetailState extends State<ContractListDetail> {
             Expanded(
               flex: 1,
               child: Row(
-                children: const [
-                  Income(),
-                  Expense(),
+                children: [
+                  Income(totPrice: widget.totPrice),
+                  Expense(total: widget.total),
                 ],
               ),
             ),

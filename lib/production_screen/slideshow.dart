@@ -1,10 +1,18 @@
-import 'package:ada_bread/main_screen/slideShowItem.dart';
+import 'package:ada_bread/production_screen/slideShowItem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 
 class Slide extends StatelessWidget {
+  final List production;
+  const Slide({this.production});
+
   @override
   Widget build(BuildContext context) {
+    double totProduced = (double.parse(production.first.bale_5) +
+        double.parse(production.first.bale_10) +
+        double.parse(production.first.slice) +
+        double.parse(production.first.bombolino));
+
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
@@ -32,11 +40,26 @@ class Slide extends StatelessWidget {
             /// The widgets to display in the [ImageSlideshow].
             /// Add the sample image file into the images folder
             children: [
-              SlideShowItem(bale_5: 'አጠቃላይ', image: 'logo_2.jpg'),
-              SlideShowItem(bale_5: 'ባለ 5 ብር', image: 'bale_5.png'),
-              SlideShowItem(bale_5: 'ባለ 10 ብር', image: 'bale_10.png'),
-              SlideShowItem(bale_5: 'ስላይስ', image: 'slice.png'),
-              SlideShowItem(bale_5: 'ቦምቦሊኖ', image: 'donut.png'),
+              SlideShowItem(
+                  bale_5: 'አጠቃላይ',
+                  image: 'logo_2.jpg',
+                  value: totProduced.toString()),
+              SlideShowItem(
+                  bale_5: 'ባለ 5 ብር',
+                  image: 'bale_5.png',
+                  value: production.first.bale_5.toString()),
+              SlideShowItem(
+                  bale_5: 'ባለ 10 ብር',
+                  image: 'bale_10.png',
+                  value: production.first.bale_10.toString()),
+              SlideShowItem(
+                  bale_5: 'ስላይስ',
+                  image: 'slice.png',
+                  value: production.first.slice.toString()),
+              SlideShowItem(
+                  bale_5: 'ቦምቦሊኖ',
+                  image: 'donut.png',
+                  value: production.first.bombolino.toString()),
             ],
 
             /// Called whenever the page in the center of the viewport changes.

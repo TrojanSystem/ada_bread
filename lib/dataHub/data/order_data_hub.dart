@@ -1,42 +1,42 @@
-import 'package:ada_bread/dataHub/data_model/contract_model.dart';
+import 'package:ada_bread/dataHub/data_model/orderModel.dart';
 import 'package:flutter/material.dart';
 
-import 'database/contract_model_database.dart';
+import '../database/orderModelDatabase.dart';
 
-class ProductionModelData extends ChangeNotifier {
-  ContractModelDatabase contractModelDB = ContractModelDatabase();
+class OrderDataHub extends ChangeNotifier {
+  OrderModelDatabase orderedModelDB = OrderModelDatabase();
 
   bool _isLoading = true;
 
-  List<ContractModel> _contractList = [];
+  List<OrderModel> _orderList = [];
 
-  List<ContractModel> get contractList => _contractList;
+  List<OrderModel> get orderList => _orderList;
 
   bool get isLoading => _isLoading;
 
-  Future loadContractList() async {
+  Future loadOrderList() async {
     _isLoading = true;
     notifyListeners();
-    _contractList = await contractModelDB.getTasks();
+    _orderList = await orderedModelDB.getTasks();
     _isLoading = false;
     notifyListeners();
   }
 
-  Future addContractList(ContractModel task) async {
-    await contractModelDB.insertTask(task);
-    await loadContractList();
+  Future addOrderList(OrderModel task) async {
+    await orderedModelDB.insertTask(task);
+    await loadOrderList();
     notifyListeners();
   }
 
-  Future updateContractList(ContractModel task) async {
-    await contractModelDB.updateTaskList(task);
-    await loadContractList();
+  Future updateOrderList(OrderModel task) async {
+    await orderedModelDB.updateTaskList(task);
+    await loadOrderList();
     notifyListeners();
   }
 
-  Future deleteContractList(String task) async {
-    await contractModelDB.deleteTask(task);
-    await loadContractList();
+  Future deleteOrderList(int task) async {
+    await orderedModelDB.deleteTask(task);
+    await loadOrderList();
     notifyListeners();
   }
 

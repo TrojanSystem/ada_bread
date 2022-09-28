@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import 'expenses_data.dart';
+import '../dataHub/data/expenses_data.dart';
+import 'month_progress_expense_detail_item.dart';
 
 class MonthProgressExpenseItem extends StatefulWidget {
   MonthProgressExpenseItem({Key key}) : super(key: key);
@@ -19,6 +20,18 @@ class _MonthProgressExpenseItemState extends State<MonthProgressExpenseItem> {
   Widget build(BuildContext context) {
     final monthSelected = Provider.of<ExpensesData>(context).monthOfAYear;
 
+    final yearFilter = Provider.of<ExpensesData>(context).expenseList;
+    final monthFilterList = yearFilter
+        .where((element) =>
+            DateTime.parse(element.itemDate).year == DateTime.now().year)
+        .toList();
+    var todayFilteredExpenseList = monthFilterList
+        .where((element) =>
+            DateTime.parse(element.itemDate).month == selectedMonth)
+        .toList();
+
+    var filterName =
+        todayFilteredExpenseList.map((e) => e.itemName).toSet().toList();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -46,21 +59,33 @@ class _MonthProgressExpenseItemState extends State<MonthProgressExpenseItem> {
                 )
                 .toList(),
             onChanged: (value) {
-              setState(() {});
+              setState(() {
+                selectedMonth = value;
+              });
             },
           ),
         ],
       ),
-      body: const Center(
-        child: Text(
-          'No Expense yet!',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 25,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
-      ),
+      body: todayFilteredExpenseList.isNotEmpty
+          ? ListView.builder(
+              itemCount: filterName.length,
+              itemBuilder: (context, index) {
+                return MonthProgressExpenseDetailItem(
+                  todayFilteredList: todayFilteredExpenseList,
+                  index: index,
+                );
+              },
+            )
+          : const Center(
+              child: Text(
+                'No Expense yet!',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ),
     );
   }
 }

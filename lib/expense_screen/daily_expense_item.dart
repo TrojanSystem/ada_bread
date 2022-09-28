@@ -1,8 +1,16 @@
+import 'package:ada_bread/dataHub/data/expenses_data.dart';
+import 'package:ada_bread/dataHub/data_model/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import 'update_expense.dart';
 
 class ExpenseItem extends StatelessWidget {
+  final List dailyExpense;
+  ExpenseItem({this.dailyExpense});
+
   // final int index;
 
   @override
@@ -13,7 +21,7 @@ class ExpenseItem extends StatelessWidget {
         padding: EdgeInsets.all(_w / 22),
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
-        itemCount: 3,
+        itemCount: dailyExpense.length,
         itemBuilder: (BuildContext context, int index) {
           return AnimationConfiguration.staggeredList(
             position: index,
@@ -44,7 +52,7 @@ class ExpenseItem extends StatelessWidget {
                               ),
                               Text(
                                 DateFormat.yMMMEd().format(
-                                  DateTime.now(),
+                                  DateTime.parse(dailyExpense[index].itemDate),
                                 ),
                                 style: const TextStyle(
                                   color: Colors.black,
@@ -66,9 +74,9 @@ class ExpenseItem extends StatelessWidget {
                                     MainAxisAlignment.spaceEvenly,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Text(
-                                    'itemName',
-                                    style: TextStyle(
+                                  Text(
+                                    dailyExpense[index].itemName,
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -77,9 +85,9 @@ class ExpenseItem extends StatelessWidget {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  const Text(
-                                    'itemQuantity',
-                                    style: TextStyle(
+                                  Text(
+                                    '${dailyExpense[index].itemQuantity}',
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -90,7 +98,24 @@ class ExpenseItem extends StatelessWidget {
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => UpdateExpense(
+                                            index: dailyExpense[index].id,
+                                            existedItemName:
+                                                dailyExpense[index].itemName,
+                                            existedItemDate:
+                                                dailyExpense[index].itemDate,
+                                            existedItemPrice:
+                                                dailyExpense[index].itemPrice,
+                                            existedItemQuantity:
+                                                dailyExpense[index]
+                                                    .itemQuantity,
+                                          ),
+                                        ),
+                                      );
+                                    },
                                     icon: const Icon(
                                       Icons.edit,
                                       color: Colors.green,
@@ -98,7 +123,30 @@ class ExpenseItem extends StatelessWidget {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () async {},
+                                    onPressed: () async {
+                                      Provider.of<ExpensesData>(context,
+                                              listen: false)
+                                          .deleteExpenseList(
+                                              dailyExpense[index].id);
+                                      double totalMinus = Provider.of<
+                                                  ExpensesData>(context,
+                                              listen: false)
+                                          .minusTotalPrice(double.parse(
+                                              dailyExpense[index].itemPrice));
+                                      final updateExpense = ExpenseModel(
+                                        id: dailyExpense[index].id,
+                                        itemName: dailyExpense[index].itemName,
+                                        itemDate: dailyExpense[index].itemDate,
+                                        itemPrice:
+                                            dailyExpense[index].itemPrice,
+                                        itemQuantity:
+                                            dailyExpense[index].itemQuantity,
+                                        total: totalMinus.toString(),
+                                      );
+                                      Provider.of<ExpensesData>(context,
+                                              listen: false)
+                                          .updateExpenseList(updateExpense);
+                                    },
                                     icon: const Icon(
                                       Icons.delete_forever,
                                       color: Colors.red,
@@ -138,9 +186,9 @@ class ExpenseItem extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const Text(
-                              'itemPrice',
-                              style: TextStyle(
+                            Text(
+                              dailyExpense[index].itemPrice,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,

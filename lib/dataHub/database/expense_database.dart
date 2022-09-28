@@ -1,6 +1,7 @@
-import 'package:ada_bread/dataHub/shop_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../data_model/expense_model.dart';
 
 class DatabaseExpense {
   Future<Database> database() async {

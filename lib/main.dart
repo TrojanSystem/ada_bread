@@ -1,8 +1,13 @@
-import 'package:ada_bread/dataHub/data_storage.dart';
-import 'package:ada_bread/dataHub/production_data_hub.dart';
+import 'package:ada_bread/dataHub/data/expenses_data.dart';
 import 'package:ada_bread/main_screen/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'dataHub/data/daily_production_data.dart';
+import 'dataHub/data/data_storage.dart';
+import 'dataHub/data/order_data_hub.dart';
+import 'dataHub/data/production_data_hub.dart';
+import 'expense_screen/daily_expense_pdf_report.dart';
 
 void main() {
   runApp(
@@ -24,6 +29,19 @@ class _AdaBreadState extends State<AdaBread> {
       providers: [
         ChangeNotifierProvider(
           create: (BuildContext context) => DataStorage(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => FileHandlerForExpense(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => ExpensesData()..loadExpenseList(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => OrderDataHub()..loadOrderList(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) =>
+              DailyProductionData()..loadProductionList(),
         ),
         ChangeNotifierProvider(
           create: (BuildContext context) =>

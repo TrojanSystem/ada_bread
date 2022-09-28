@@ -1,4 +1,4 @@
-import 'package:ada_bread/dataHub/daily_production_data.dart';
+import 'package:ada_bread/dataHub/data/daily_production_data.dart';
 import 'package:ada_bread/dataHub/data_model/production_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -210,7 +210,6 @@ class _ProductionInputState extends State<ProductionInput> {
                     formKey.currentState.save();
                     final addDailyProduct = ProductionModel(
                       bale_5: bale_5,
-                      id: DateTime.now().day,
                       bale_10: bale_10,
                       slice: slice,
                       bombolino: bombolino,

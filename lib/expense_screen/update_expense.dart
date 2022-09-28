@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../dataHub/data/expenses_data.dart';
+import '../dataHub/data_model/expense_model.dart';
 
 class UpdateExpense extends StatefulWidget {
   final int index;
@@ -225,7 +229,21 @@ class _UpdateExpenseState extends State<UpdateExpense> {
               onTap: () {
                 if (formKey.currentState.validate()) {
                   formKey.currentState.save();
-
+                  double total =
+                      Provider.of<ExpensesData>(context, listen: false)
+                          .updateTotalPrice(
+                              double.parse(widget.existedItemPrice),
+                              updateItemPrice);
+                  var updateModel = ExpenseModel(
+                    id: widget.index,
+                    itemDate: updateDateTime,
+                    itemName: updateItemName,
+                    itemPrice: updateItemPrice.toStringAsFixed(2),
+                    itemQuantity: updateItemQuantity,
+                    total: total.toStringAsFixed(2),
+                  );
+                  Provider.of<ExpensesData>(context, listen: false)
+                      .updateExpenseList(updateModel);
                   Navigator.of(context).pop();
                 }
               },

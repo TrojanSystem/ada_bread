@@ -1,11 +1,16 @@
-import 'package:ada_bread/dataHub/data_storage.dart';
+import 'package:ada_bread/expense_screen/month_progress_expense_item.dart';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import '../dataHub/data/expenses_data.dart';
 import '../drop_down_menu_button.dart';
+import '../profit_analysis/profit_analysis_screen.dart';
 import 'add_expense.dart';
+import 'daily_expense_item.dart';
+import 'daily_expense_pdf_report.dart';
 
 class ExpenseScreen extends StatefulWidget {
   ExpenseScreen({Key key}) : super(key: key);
@@ -20,9 +25,50 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DataStorage>(
+    final yearFilter = Provider.of<ExpensesData>(context).expenseList;
+    final result = yearFilter
+        .where((element) =>
+            DateTime.parse(element.itemDate).year == DateTime.now().year)
+        .toList();
+
+    var todayMonthFilteredList = result
+        .where((element) =>
+            DateTime.parse(element.itemDate).month == DateTime.now().month)
+        .toList();
+    var dailyExpenses = todayMonthFilteredList
+        .where((element) =>
+            DateTime.parse(element.itemDate).day == selectedDayOfMonth)
+        .toList();
+    var totSell = result
+        .where((element) =>
+            DateTime.parse(element.itemDate).month == DateTime.now().month)
+        .toList();
+    var totalSells = totSell.map((e) => e.itemPrice).toList();
+    var totSum = 0.0;
+    for (int xx = 0; xx < totalSells.length; xx++) {
+      totSum += double.parse(totalSells[xx]);
+    }
+    var totalDailySells = dailyExpenses.map((e) => e.itemPrice).toList();
+    var totDailySum = 0.0;
+    for (int xx = 0; xx < totalDailySells.length; xx++) {
+      totDailySum += double.parse(totalDailySells[xx]);
+    }
+    final newLabour = dailyExpenses
+        .map((e) => DailyExpensePDFReport(
+              id: e.id.toString(),
+              price: e.itemPrice,
+              name: e.itemName,
+              description: e.itemQuantity,
+              date: DateFormat.yMMMEd().format(
+                DateTime.parse(e.itemDate),
+              ),
+            ))
+        .toList();
+    Provider.of<FileHandlerForExpense>(context, listen: false).fileList =
+        newLabour;
+    return Consumer<ExpensesData>(
       builder: (context, dailyExpense, child) => Scaffold(
-        backgroundColor: const Color.fromRGBO(3, 83, 151, 1),
+        //backgroundColor: const Color.fromRGBO(3, 83, 151, 1),
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(3, 83, 151, 1),
           title: const Text(
@@ -30,7 +76,6 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             style: storageTitle,
           ),
           elevation: 0,
-          toolbarHeight: 90,
         ),
         body: Column(
           children: [
@@ -61,7 +106,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                               )
                               .toList(),
                           onChanged: (value) {
-                            setState(() {});
+                            setState(() {
+                              selectedDayOfMonth = value;
+                            });
                           },
                         ),
                       ),
@@ -69,13 +116,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                         padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
-                              'Daily Expense: ',
+                              'Daily Expense: $totDailySum',
                               style: dailyIncomeStyle,
                             ),
                             Text(
-                              'Total: ',
+                              'Total: $totSum',
                               style: dailyIncomeStyle,
                             ),
                           ],
@@ -87,23 +134,26 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 color: const Color.fromRGBO(3, 83, 151, 1),
               ),
             ),
-            const Expanded(
-                flex: 12,
-                child: Center(
-                  child: Text(
-                    'Not yet!',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 25,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                )),
+            Expanded(
+              flex: 12,
+              child: dailyExpenses.isEmpty
+                  ? Image.asset(
+                      'images/empty.png',
+                      width: 300,
+                    )
+                  : dailyExpense.isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.red,
+                          ),
+                        )
+                      : ExpenseItem(dailyExpense: dailyExpenses),
+            ),
           ],
         ),
         floatingActionButton: Builder(
           builder: (context) => DropDownMenuButton(
-            primaryColor: Colors.red,
+            primaryColor: Colors.red[800],
             button_1: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -112,10 +162,25 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               );
             },
             button_2: () {
-              setState(() {});
+              setState(() {
+                Provider.of<FileHandlerForExpense>(context, listen: false)
+                    .createTable();
+              });
             },
-            button_3: () {},
-            button_4: () {},
+            button_3: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => MonthProgressExpenseItem(),
+                ),
+              );
+            },
+            button_4: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ProfitAnalaysisScreen(),
+                ),
+              );
+            },
           ),
         ),
       ),

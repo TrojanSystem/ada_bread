@@ -1,84 +1,39 @@
-import 'package:ada_bread/main_screen/slideshow.dart';
+import 'package:ada_bread/dataHub/data/daily_production_data.dart';
 import 'package:ada_bread/production_screen/production_input.dart';
+import 'package:ada_bread/production_screen/progress_indicator.dart';
+import 'package:ada_bread/production_screen/slideshow.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../drop_down_menu_button.dart';
-import '../main_screen/progress_indicator.dart';
 import 'contract_list.dart';
 
 class ProductionPage extends StatefulWidget {
-  ProductionPage({Key key}) : super(key: key);
+  const ProductionPage({Key key}) : super(key: key);
 
   @override
   State<ProductionPage> createState() => _ProductionPageState();
 }
 
 class _ProductionPageState extends State<ProductionPage> {
+  final List<String> images = [
+    'images/bale_5.png',
+    'images/bale_10.png',
+    'images/slice.png',
+    'images/donut.png',
+  ];
+  final List varItem = ['bale_5', 'bale_10', 'slice', 'bombolino'];
   @override
   Widget build(BuildContext context) {
+    final dailyProducedItem =
+        Provider.of<DailyProductionData>(context).productionList;
     return Scaffold(
       body: Column(
         children: [
           Expanded(
             flex: 3,
-            child: Slide(),
+            child: Slide(production: dailyProducedItem),
           ),
-          // Expanded(
-          //   flex: 1,
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Padding(
-          //         padding: const EdgeInsets.all(15.0),
-          //         child: Column(
-          //           children: [
-          //             Text(
-          //               'Expenses',
-          //               style: TextStyle(
-          //                 decoration: TextDecoration.underline,
-          //                 color: Colors.red[800],
-          //                 fontWeight: FontWeight.w900,
-          //                 fontSize: 22,
-          //               ),
-          //             ),
-          //             Text(
-          //               '6600',
-          //               style: TextStyle(
-          //                 color: Colors.red[800],
-          //                 fontWeight: FontWeight.w900,
-          //                 fontSize: 22,
-          //               ),
-          //             )
-          //           ],
-          //         ),
-          //       ),
-          //       Padding(
-          //         padding: const EdgeInsets.all(15.0),
-          //         child: Column(
-          //           children: [
-          //             Text(
-          //               'Income',
-          //               style: TextStyle(
-          //                 decoration: TextDecoration.underline,
-          //                 color: Colors.green[800],
-          //                 fontWeight: FontWeight.w900,
-          //                 fontSize: 22,
-          //               ),
-          //             ),
-          //             Text(
-          //               '10000',
-          //               style: TextStyle(
-          //                 color: Colors.green[800],
-          //                 fontWeight: FontWeight.w900,
-          //                 fontSize: 22,
-          //               ),
-          //             )
-          //           ],
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
           Expanded(
             flex: 4,
             child: ListView(
@@ -91,13 +46,13 @@ class _ProductionPageState extends State<ProductionPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Image.asset(
-                        'images/bale_10.png',
+                        'images/bale_5.png',
                         width: 45,
                         height: 45,
                       ),
-                      const ProgressContainerItem(
-                        taskDone: 3,
-                        totalTask: 7,
+                      ProgressContainerItem(
+                        soldItem: '3',
+                        dailyProducedItem: dailyProducedItem.first.bale_10,
                       ),
                     ],
                   ),
@@ -110,13 +65,13 @@ class _ProductionPageState extends State<ProductionPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Image.asset(
-                        'images/bale_5.png',
+                        'images/bale_10.png',
                         width: 45,
                         height: 45,
                       ),
-                      const ProgressContainerItem(
-                        taskDone: 3,
-                        totalTask: 7,
+                      ProgressContainerItem(
+                        soldItem: '3',
+                        dailyProducedItem: dailyProducedItem.first.bale_10,
                       ),
                     ],
                   ),
@@ -133,9 +88,9 @@ class _ProductionPageState extends State<ProductionPage> {
                         width: 45,
                         height: 45,
                       ),
-                      const ProgressContainerItem(
-                        taskDone: 3,
-                        totalTask: 7,
+                      ProgressContainerItem(
+                        soldItem: '0',
+                        dailyProducedItem: dailyProducedItem.first.slice,
                       ),
                     ],
                   ),
@@ -153,8 +108,8 @@ class _ProductionPageState extends State<ProductionPage> {
                         height: 45,
                       ),
                       ProgressContainerItem(
-                        taskDone: 3,
-                        totalTask: 7,
+                        soldItem: '3',
+                        dailyProducedItem: dailyProducedItem.first.bombolino,
                       ),
                     ],
                   ),

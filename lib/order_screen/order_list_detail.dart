@@ -1,4 +1,3 @@
-import 'package:ada_bread/production_screen/contrat_input.dart';
 import 'package:ada_bread/production_screen/expense.dart';
 import 'package:ada_bread/production_screen/income.dart';
 import 'package:flutter/material.dart';
@@ -9,37 +8,42 @@ import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../dataHub/data/data_storage.dart';
-import '../dataHub/data/production_data_hub.dart';
-import '../drop_down_menu_button.dart';
-import 'contract_list_detail.dart';
+import '../dataHub/data/order_data_hub.dart';
 
-class ItemDetails extends StatefulWidget {
-  const ItemDetails({Key key}) : super(key: key);
+class OrderListItem extends StatefulWidget {
+  const OrderListItem({Key key}) : super(key: key);
 
   @override
-  State<ItemDetails> createState() => _ItemDetailsState();
+  State<OrderListItem> createState() => _OrderListItemState();
 }
 
-class _ItemDetailsState extends State<ItemDetails> {
-  int selectedMonth = DateTime.now().day;
+class _OrderListItemState extends State<OrderListItem> {
+  int selectedMonth = DateTime.now().month;
 
   @override
   Widget build(BuildContext context) {
     double _w = MediaQuery.of(context).size.width;
-    final monthSelected = Provider.of<DataStorage>(context).daysOfMonth;
-    final List contrat = Provider.of<ProductionModelData>(context).contractList;
-    double totPriceDabo = 0;
-    var quantityOfBread = contrat.map((e) => e.quantity).toList();
-    double sumDabo = 0;
-    var totDaboDelivered = contrat.map((e) => e.quantity).toList();
+    final monthSelected = Provider.of<DataStorage>(context).monthOfAYear;
+    final yearFilter = Provider.of<OrderDataHub>(context).orderList;
+    final result = yearFilter
+        .where((element) =>
+            DateTime.parse(element.date).year == DateTime.now().year)
+        .toList();
 
-    for (int x = 0; x < totDaboDelivered.length; x++) {
-      sumDabo += int.parse(totDaboDelivered[x]);
+    var orderListDetail = result
+        .where((element) => DateTime.parse(element.date).month == selectedMonth)
+        .toList();
+
+    double totOrderedKg = 0;
+    double totPriceOrder = 0;
+    var quantityOfBread = orderListDetail.map((e) => e.orderedKilo).toList();
+
+    var priceOfBread = orderListDetail.map((e) => e.totalAmount).toList();
+    for (int x = 0; x < priceOfBread.length; x++) {
+      totPriceOrder += double.parse(priceOfBread[x]);
     }
-    var priceOfBread = contrat.map((e) => e.price).toList();
     for (int x = 0; x < quantityOfBread.length; x++) {
-      totPriceDabo +=
-          double.parse(quantityOfBread[x]) * double.parse(priceOfBread[x]);
+      totOrderedKg += double.parse(quantityOfBread[x]);
     }
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +56,7 @@ class _ItemDetailsState extends State<ItemDetails> {
             ], begin: Alignment.bottomRight, end: Alignment.topLeft),
           ),
         ),
-        title: const Text('የቀን ኮትራት የተሰጠ ዝርዝር'),
+        title: const Text('Order List'),
         actions: [
           DropdownButton(
             dropdownColor: Colors.grey[850],
@@ -63,30 +67,30 @@ class _ItemDetailsState extends State<ItemDetails> {
                 .map(
                   (e) => DropdownMenuItem(
                     child: Text(
-                      e['mon'],
+                      e['month'],
                       style: kkDropDown,
                     ),
-                    value: e['day'],
+                    value: e['days'],
                   ),
                 )
                 .toList(),
             onChanged: (value) {
               setState(() {
-                selectedMonth = value as int;
+                selectedMonth = value;
               });
             },
           ),
         ],
       ),
-      body: Consumer<ProductionModelData>(
+      body: Consumer<OrderDataHub>(
         builder: (context, data, child) => Column(
           children: [
             Expanded(
               flex: 1,
               child: Row(
                 children: [
-                  Income(totPrice: totPriceDabo),
-                  Expense(total: sumDabo),
+                  Income(totPrice: totPriceOrder),
+                  Expense(total: totOrderedKg),
                 ],
               ),
             ),
@@ -97,7 +101,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                   padding: EdgeInsets.all(_w / 30),
                   physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics()),
-                  itemCount: data.contractList.length,
+                  itemCount: orderListDetail.length,
                   itemBuilder: (BuildContext context, int index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -149,7 +153,10 @@ class _ItemDetailsState extends State<ItemDetails> {
                                     child: Column(
                                       children: [
                                         Text(
-                                          data.contractList[index].price,
+                                          orderListDetail[index].totalAmount,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 20),
                                         ),
                                         const SizedBox(
                                           height: 5,
@@ -176,20 +183,20 @@ class _ItemDetailsState extends State<ItemDetails> {
                                         padding:
                                             const EdgeInsets.only(bottom: 8.0),
                                         child: Text(
-                                          data.contractList[index].name,
+                                          orderListDetail[index].name,
                                         ),
                                       ),
                                       subtitle: Text(
                                         DateFormat.yMMMEd().format(
                                           DateTime.parse(
-                                              data.contractList[index].date),
+                                              orderListDetail[index].date),
                                         ),
                                       ),
                                       trailing: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text(
-                                            'Dabo',
+                                            'KG',
                                             style: TextStyle(
                                               color: Colors.green[800],
                                               fontFamily: 'FjallaOne',
@@ -198,7 +205,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                                             ),
                                           ),
                                           Text(
-                                            data.contractList[index].quantity
+                                            orderListDetail[index]
+                                                .orderedKilo
                                                 .toString(),
                                             style: TextStyle(
                                               color: Colors.green[800],
@@ -244,27 +252,6 @@ class _ItemDetailsState extends State<ItemDetails> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: Builder(
-        builder: (context) => DropDownMenuButton(
-            primaryColor: Colors.red,
-            button_1: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const ContratInput(),
-                ),
-              );
-            },
-            button_2: () {},
-            button_3: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => ContractListDetail(
-                      totPrice: totPriceDabo, total: sumDabo),
-                ),
-              );
-            },
-            button_4: () {}),
       ),
     );
   }

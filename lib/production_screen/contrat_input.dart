@@ -1,8 +1,9 @@
 import 'package:ada_bread/dataHub/data_model/contract_model.dart';
-import 'package:ada_bread/dataHub/production_data_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../dataHub/data/production_data_hub.dart';
 
 class ContratInput extends StatefulWidget {
   const ContratInput({Key key}) : super(key: key);

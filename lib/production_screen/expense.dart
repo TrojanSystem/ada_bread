@@ -1,19 +1,11 @@
-import 'package:ada_bread/dataHub/production_data_hub.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Expense extends StatelessWidget {
-  const Expense({Key key}) : super(key: key);
+  final double total;
+  const Expense({this.total});
 
   @override
   Widget build(BuildContext context) {
-    final List contrat = Provider.of<ProductionModelData>(context).contractList;
-    int sumDabo = 0;
-    var totDaboDelivered = contrat.map((e) => e.quantity).toList();
-
-    for (int x = 0; x < totDaboDelivered.length; x++) {
-      sumDabo += int.parse(totDaboDelivered[x]);
-    }
     return Expanded(
       child: Container(
         child: Column(
@@ -44,7 +36,7 @@ class Expense extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  sumDabo.toString(),
+                  total.toString(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,

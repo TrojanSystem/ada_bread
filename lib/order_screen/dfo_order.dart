@@ -1,5 +1,9 @@
+import 'package:ada_bread/dataHub/data_model/orderModel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../dataHub/data/order_data_hub.dart';
 
 class DfoOrder extends StatefulWidget {
   const DfoOrder({Key key}) : super(key: key);
@@ -10,7 +14,12 @@ class DfoOrder extends StatefulWidget {
 
 class _DfoOrderState extends State<DfoOrder> {
   final formKey = GlobalKey<FormState>();
-  String lists = '';
+  String name = '';
+  String phoneNumber = '';
+  String orderedKilo = '';
+  String pricePerKG = '';
+  String totalAmount = '';
+  String remain = '';
   String dateTime = DateTime.now().toString();
   void datePicker() {
     showDatePicker(
@@ -57,14 +66,14 @@ class _DfoOrderState extends State<DfoOrder> {
                   ),
                   TextFormField(
                     validator: (value) {
-                      if (value != null) {
+                      if (value == null) {
                         return 'Name can\'t be empty';
                       } else {
                         return null;
                       }
                     },
                     onSaved: (value) {
-                      lists = value;
+                      name = value;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter the name',
@@ -100,14 +109,14 @@ class _DfoOrderState extends State<DfoOrder> {
                   ),
                   TextFormField(
                     validator: (value) {
-                      if (value != null) {
+                      if (value == null) {
                         return 'Phone Number can\'t be empty';
                       } else {
                         return null;
                       }
                     },
                     onSaved: (value) {
-                      lists = value;
+                      phoneNumber = value;
                     },
                     decoration: InputDecoration(
                       hintText: 'Enter phone number',
@@ -191,14 +200,14 @@ class _DfoOrderState extends State<DfoOrder> {
                         ),
                         TextFormField(
                           validator: (value) {
-                            if (value != null) {
+                            if (value == null) {
                               return 'Can\'t be empty';
                             } else {
                               return null;
                             }
                           },
                           onSaved: (value) {
-                            lists = value;
+                            orderedKilo = value;
                           },
                           decoration: InputDecoration(
                             hintText: 'Enter Kilo',
@@ -237,14 +246,14 @@ class _DfoOrderState extends State<DfoOrder> {
                         ),
                         TextFormField(
                           validator: (value) {
-                            if (value != null) {
+                            if (value == null) {
                               return 'Can\'t be empty';
                             } else {
                               return null;
                             }
                           },
                           onSaved: (value) {
-                            lists = value;
+                            pricePerKG = value;
                           },
                           decoration: InputDecoration(
                             hintText: 'Enter Price',
@@ -287,14 +296,14 @@ class _DfoOrderState extends State<DfoOrder> {
                         ),
                         TextFormField(
                           validator: (value) {
-                            if (value != null) {
+                            if (value == null) {
                               return 'Can\'t be empty';
                             } else {
                               return null;
                             }
                           },
                           onSaved: (value) {
-                            lists = value;
+                            totalAmount = value;
                           },
                           decoration: InputDecoration(
                             hintText: 'Enter amount',
@@ -333,14 +342,14 @@ class _DfoOrderState extends State<DfoOrder> {
                         ),
                         TextFormField(
                           validator: (value) {
-                            if (value != null) {
+                            if (value == null) {
                               return 'Can\'t be empty';
                             } else {
                               return null;
                             }
                           },
                           onSaved: (value) {
-                            lists = value;
+                            remain = value;
                           },
                           decoration: InputDecoration(
                             hintText: 'Remain',
@@ -367,7 +376,17 @@ class _DfoOrderState extends State<DfoOrder> {
               onTap: () {
                 if (formKey.currentState.validate()) {
                   formKey.currentState.save();
-
+                  final addNewOrder = OrderModel(
+                    date: dateTime,
+                    name: name,
+                    orderedKilo: orderedKilo,
+                    phoneNumber: phoneNumber,
+                    pricePerKG: pricePerKG,
+                    remain: remain,
+                    totalAmount: totalAmount,
+                  );
+                  Provider.of<OrderDataHub>(context, listen: false)
+                      .addOrderList(addNewOrder);
                   Navigator.of(context).pop();
                 }
               },

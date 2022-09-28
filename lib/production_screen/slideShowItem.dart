@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class SlideShowItem extends StatelessWidget {
   final String bale_5;
   final String image;
+  final String value;
 
-  SlideShowItem({this.bale_5, this.image});
+  SlideShowItem({this.bale_5, this.value, this.image});
   String Sentence = 'Here';
   bool isExpanded = true;
   bool isExpanded2 = true;
@@ -93,14 +94,15 @@ class SlideShowItem extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
+              children: [
+                const Text(
                   'Produced',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
                 ),
                 Text(
-                  '5',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
+                  value.toString(),
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.w900),
                 ),
               ],
             ),
@@ -121,7 +123,7 @@ class SlideShowItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 Text(
-                  'Income',
+                  'Tot Income',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
                 ),
                 Text(

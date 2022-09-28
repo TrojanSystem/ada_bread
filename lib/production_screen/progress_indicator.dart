@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ProgressContainerItem extends StatefulWidget {
-  final int taskDone;
-  final int totalTask;
+  final String soldItem;
+  final String dailyProducedItem;
 
   const ProgressContainerItem({
-    this.taskDone,
-    this.totalTask,
+    this.soldItem,
+    this.dailyProducedItem,
   });
 
   @override
@@ -17,6 +17,10 @@ class ProgressContainerItem extends StatefulWidget {
 class _ProgressContainerItemState extends State<ProgressContainerItem> {
   @override
   Widget build(BuildContext context) {
+    double percent = ((double.parse(widget.soldItem) /
+            double.parse(widget.dailyProducedItem)) *
+        100);
+
     return Container(
       margin: const EdgeInsets.only(left: 10, right: 5, bottom: 5),
       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -27,12 +31,20 @@ class _ProgressContainerItemState extends State<ProgressContainerItem> {
             circularStrokeCap: CircularStrokeCap.round,
             radius: 60.0,
             lineWidth: 9.0,
-            percent: 0.8,
-            center: const Text(
-              '80%',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            percent: percent / 100,
+            center: Text(
+              percent.toStringAsFixed(1),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            progressColor: Colors.blue[900],
+            progressColor: percent < 25
+                ? Colors.blue[900]
+                : percent > 25 && percent < 50
+                    ? Colors.blue
+                    : percent > 50 && percent < 75
+                        ? Colors.blueAccent
+                        : percent > 75
+                            ? Colors.green
+                            : Colors.red,
           ),
           const SizedBox(
             width: 25,
@@ -52,7 +64,7 @@ class _ProgressContainerItemState extends State<ProgressContainerItem> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: widget.taskDone.toString(),
+                      text: widget.soldItem.toString(),
                       style: TextStyle(
                         color: Colors.blue[900],
                       ),
@@ -64,13 +76,13 @@ class _ProgressContainerItemState extends State<ProgressContainerItem> {
                       ),
                     ),
                     TextSpan(
-                      text: widget.totalTask.toString(),
+                      text: widget.dailyProducedItem.toString(),
                       style: TextStyle(
                         color: Colors.blue[900],
                       ),
                     ),
                     const TextSpan(
-                      text: ' Batra done',
+                      text: ' Piece done',
                       style: TextStyle(
                         color: Colors.grey,
                       ),

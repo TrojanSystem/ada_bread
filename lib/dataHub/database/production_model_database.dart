@@ -9,7 +9,7 @@ class ProductionModelDatabase {
       join(await getDatabasesPath(), 'productionModelDatabase.db'),
       onCreate: (db, version) async {
         await db.execute(
-          '''CREATE TABLE productionModelDatabaseTable(bale_5 TEXT,bale_10 TEXT, slice TEXT, bombolino TEXT)''',
+          '''CREATE TABLE productionModelDatabaseTable(id INTEGER PRIMARY KEY,bale_5 TEXT,bale_10 TEXT, slice TEXT, bombolino TEXT)''',
         );
       },
       version: 1,

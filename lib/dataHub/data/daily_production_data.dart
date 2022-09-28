@@ -1,58 +1,43 @@
-import 'package:flutter/cupertino.dart';
+import 'package:ada_bread/dataHub/data_model/production_model.dart';
+import 'package:flutter/material.dart';
 
-class ExpensesData extends ChangeNotifier {
-  // DatabaseExpense db = DatabaseExpense();
-  double totalPrice = 0;
-  double totalIncomePrice = 0;
+import '../database/production_model_database.dart';
+
+class DailyProductionData extends ChangeNotifier {
+  ProductionModelDatabase dailyProductionDB = ProductionModelDatabase();
 
   bool _isLoading = true;
 
-//  List<ShopModel> _expenseList = [];
+  List<ProductionModel> _productionList = [];
 
-//  List<ShopModel> get expenseList => _expenseList;
+  List<ProductionModel> get productionList => _productionList;
 
   bool get isLoading => _isLoading;
 
-  // Future loadExpenseList() async {
-  //   _isLoading = true;
-  //   notifyListeners();
-  //   _expenseList = await db.getTasks();
-  //   _isLoading = false;
-  //   notifyListeners();
-  // }
-  //
-  // Future addExpenseList(ShopModel task) async {
-  //   await db.insertTask(task);
-  //   await loadExpenseList();
-  //   notifyListeners();
-  // }
-  //
-  // Future updateExpenseList(ShopModel task) async {
-  //   await db.updateTaskList(task);
-  //   await loadExpenseList();
-  //   notifyListeners();
-  // }
-  //
-  // Future deleteExpenseList(int task) async {
-  //   await db.deleteTask(task);
-  //   await loadExpenseList();
-  //   notifyListeners();
-  // }
-
-  double addTotalPrice(price) {
-    totalPrice += price;
-    return totalPrice;
+  Future loadProductionList() async {
+    _isLoading = true;
+    notifyListeners();
+    _productionList = await dailyProductionDB.getTasks();
+    _isLoading = false;
+    notifyListeners();
   }
 
-  double minusTotalPrice(double price) {
-    totalPrice = totalPrice - price;
-    return totalPrice;
+  Future addProductionList(ProductionModel task) async {
+    await dailyProductionDB.insertTask(task);
+    await loadProductionList();
+    notifyListeners();
   }
 
-  double updateTotalPrice(double price, double updatePrice) {
-    totalPrice -= price;
-    totalPrice += updatePrice;
-    return totalPrice;
+  Future updateProductionList(ProductionModel task) async {
+    await dailyProductionDB.updateTaskList(task);
+    await loadProductionList();
+    notifyListeners();
+  }
+
+  Future deleteProductionList(String task) async {
+    await dailyProductionDB.deleteTask(task);
+    await loadProductionList();
+    notifyListeners();
   }
 
   List daysOfMonth = [

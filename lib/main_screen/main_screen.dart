@@ -1,4 +1,3 @@
-import 'package:ada_bread/main_screen/slideshow.dart';
 import 'package:ada_bread/production_screen/seller_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.dart';
@@ -6,7 +5,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 
 import '../constants.dart';
-import '../dataHub/data_storage.dart';
+import '../dataHub/data/data_storage.dart';
 import '../drop_down_menu_button.dart';
 
 class MainScreen extends StatefulWidget {
@@ -91,10 +90,6 @@ class _MainScreenState extends State<MainScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Expanded(
-            flex: 2,
-            child: Slide(),
-          ),
           Expanded(
             flex: 3,
             child: AnimationLimiter(

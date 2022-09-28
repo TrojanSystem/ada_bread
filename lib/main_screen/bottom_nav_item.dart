@@ -1,7 +1,8 @@
-import 'package:ada_bread/dataHub/data_storage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../dataHub/data/data_storage.dart';
 
 class MyCustomBottomNavigationBar extends StatefulWidget {
   @override
